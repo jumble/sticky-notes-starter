@@ -68,17 +68,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         _ACTIVE_NOTES[self.obj.id] = self
 
     def mousePressEvent(self, e):
-        self.previous_pos = e.globalPos()
+        self._drag_active = True
+        self.event_offset = e.globalPos() - self.pos()
 
     def mouseMoveEvent(self, e):
-        delta = e.globalPos() - self.previous_pos
-        self.move(self.x() + delta.x(), self.y()+delta.y())
-        self.previous_pos = e.globalPos()
-
-        self._drag_active = True
+        delta = e.globalPos() - self.event_offset
+        self.move(delta.x(), delta.y())
 
     def mouseReleaseEvent(self, e):
-        if self._drag_active:
+        if(self._drag_active):
             self.save()
             self._drag_active = False
 
