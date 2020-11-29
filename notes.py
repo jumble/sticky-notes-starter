@@ -9,6 +9,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
+import signal
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
+
 Base = declarative_base()
 
 class Note(Base):
@@ -36,7 +40,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
-        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
         self.show()
 
         # Load/save note data, store this notes db reference.
@@ -110,8 +114,5 @@ if __name__ == '__main__':
         for note in existing_notes:
             MainWindow(obj=note)
 
-
-
-
-
     app.exec_()
+    
